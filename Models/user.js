@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-	username : String,
-	password : {type : String, min : 4}
+	username : {type : String, required:true},
+	password : {type : String, min : 4, required:true}
 });
 
-ongoose.model('user', userSchema);
+mongoose.model('user', userSchema);
