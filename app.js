@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var connection = mongo.connect("mongodb://localhost:27017/restrace");
+var db = mongo.connection;
 
 //Require all the models
 //-----------------------------------------------------------
