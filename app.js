@@ -4,7 +4,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
+//Require all the models
+//-----------------------------------------------------------
+require('./models/activity');
+require('./models/place');
+require('./models/race');
+require('./models/tag');
+require('./models/user');
+
+//Require all the routes
+//------------------------------------------------------------
 var routes = require('./routes/index');
 var users = require('./routes/users');
 

@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var userSchema = new Schema({
 	username : {type : String, required : true, unique : true},
 	password : {type : String, min : 4, required : true}
+	races : [{{type : mongo.Schema.Types.ObjectId, ref:"race"}]
 });
 
 UserSchema.pre('save', function(next) {
