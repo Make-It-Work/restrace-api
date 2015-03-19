@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+	Schema = mongoose.Schema;
+	Place = require('./place');
+	Race = require('./race');
 
 var activitySchema = new Schema({
 	place_id : {type : mongoose.Schema.Types.ObjectId, ref:"place", required:true},
@@ -10,10 +12,34 @@ var activitySchema = new Schema({
 
 var activity = mongoose.model('activity', activitySchema);
 
-activitySchema
 	// validate place_id is existing place
-	.path('place_id').validate(function(value){
-		//zoek in places in database naar het id
-	}, 'Invalid place id')
+activitySchema.path('place_id').validate(function (value, respond){
+	Place.findOne({_id: value}, function (err, doc) {
+        if (err || !doc) {
+            respond(false);
+        } else {
+            respond(true);
+        }
+    });
+	}, 'Invalid place id');
 
+	// validate race_id is existing race
+activitySchema.path('race_id').validate(function(){
+	Race.findOne({_id: value}, function (err, doc) {
+        if (err || !doc) {
+            respond(false);
+        } else {
+            respond(true);
+        }
+    });
+	}, 'Invalid race id');
 
+	// validate startDateTime is not expired
+activitySchema.path('place_id').validate(function(){
+		return this.startDateTime >= new Date();
+	}, 'Start date time is expired');
+
+	// validate endDateTime is after the startDateTime
+activitySchema.path('place_id').validate(function(){
+		return this.endDateTime > this.startDateTime;
+	}, 'End date time must be after the start date time');
