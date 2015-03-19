@@ -1,10 +1,10 @@
-// app/models/user.js
-// load the things we need
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+    Schema = mongoose.Schema;
+    bcrypt   = require('bcrypt-nodejs');
+    Race = require('./race');
 
 // define the schema for our user model
-var userSchema = mongoose.Schema({
+var userSchema = Schema({
 
     local            : {
         email        : String,
@@ -16,8 +16,21 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-    races : [{type : mongoose.Schema.Types.ObjectId, ref:"race"}]
+    races : [{type : Schema.Types.ObjectId, ref:"race"}],
+    ownerOfRaces : [{type : Schema.Types.ObjectId, ref:"race"}],
+    Role : [{type : String, default : 'user'}]
 });
+
+    // validate race_id is existing race
+userSchema.path('races').validate(function(){
+    Race.findOne({_id: value}, function (err, doc) {
+        if (err || !doc) {
+            respond(false);
+        } else {
+            respond(true);
+        }
+    });
+    }, 'Invalid race id');
 
 // methods ======================
 // generating a hash
