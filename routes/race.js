@@ -1,33 +1,29 @@
 var mongoose = require('mongoose');
-	router = express.Router();
-	_ = require('underscore');
+var express = require('express');
+var router = express.Router();
 	
-var Race = mongoose.model('./race');
+var Race;
 
-router.route('/')
-	
 	//get all the races
 	//-----------------------------GET------------------------
-	.get(function (req,res,next){
+router.get('/', function (req,res,next){
 		Race.find(function(err, result){
 			res.json(result);
 		});
 	})
 	//Post a new race
 	//------------------------------POST--------------------------
-	.post(function (req, res, next){
+router.post('/', function (req, res, next){
 		var race = new Race(req.body.race);
 
 		race.save(function (err, race){
 			res.send({msg: "race with id" + race._id + " has succesfully been added"});
 		});
 	});
-
-router.route('/:id')
 	
 	//Get an existing race
 	//------------------------------GET----------------------- 
-	.get(function (req, res, next){
+router.get('/:id', function (req, res, next){
 		Race.findOne({_id:req.params.id}, function (err, race){
 			res.send(race);
 		});
@@ -35,7 +31,7 @@ router.route('/:id')
 
 	//Delete a race
 	//-------------------------------DELETE---------------------------
-	.delete(function (req, res, next){
+router.delete('/:id', function (req, res, next){
 		Race.remove({_id:req.params.id}, function (err){
 			res.send({msg: "race with id" + req.params.id + " has succesfully been deleted."});
 		});
@@ -43,8 +39,11 @@ router.route('/:id')
 
 	//Update a race
 	//------------------------------PUT--------------------------------
-	.put(function (req, res, next){
+router.put('/:id', function (req, res, next){
 			//geen idee hoe
-	});
-
 });
+
+module.exports = function(RaceSchema) {
+	Race = RaceSchema;
+	return router;
+}
