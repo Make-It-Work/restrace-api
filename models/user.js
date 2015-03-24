@@ -1,10 +1,9 @@
 var mongoose = require('mongoose');
-    Schema = mongoose.Schema;
-    bcrypt   = require('bcrypt-nodejs');
-    Race = require('./race');
+var Schema = mongoose.Schema;
+var bcrypt   = require('bcrypt-nodejs');
 
 // define the schema for our user model
-var userSchema = Schema({
+var userSchema = new Schema({
 
     local            : {
         email        : String,
@@ -16,22 +15,21 @@ var userSchema = Schema({
         email        : String,
         name         : String
     },
-    races : [{type : Schema.Types.ObjectId, ref:"race"}],
-    ownerOfRaces : [{type : Schema.Types.ObjectId, ref:"race"}],
     Role : [{type : String, default : 'user'}]
 });
 
     // validate race_id is existing race
-// userSchema.path('races').validate(function(){
-//     Race.findOne({_id: value}, function (err, doc) {
-//         if (err || !doc) {
-//             respond(false);
-//         } else {
-//             respond(true);
-//         }
-//     });
-//     }, 'Invalid race id');
-
+    /*
+userSchema.path('races').validate(function(){
+    Race.findOne({_id: value}, function (err, doc) {
+        if (err || !doc) {
+            respond(false);
+        } else {
+            respond(true);
+        }
+    });
+    }, 'Invalid race id');
+*/
 // methods ======================
 // generating a hash
 userSchema.methods.generateHash = function(password) {
@@ -43,5 +41,8 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
+var User = mongoose.model('User', userSchema);
+
 // create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+//module.exports = function(){ return User; }
+//module.exports.ikword = 'gek';

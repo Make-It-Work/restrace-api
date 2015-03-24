@@ -11,4 +11,13 @@ var placeSchema = new Schema({
     }
 });
 
-mongoose.model('place', placeSchema);
+    // validate google_id is already existing in our database
+placeSchema.path('google_id').validate(function (value, respond){
+		place.findOne({google_id : value}, function (err, doc){
+
+       //google id in onze databse?
+		});
+    });
+
+
+var Place = mongoose.model('Place', placeSchema);

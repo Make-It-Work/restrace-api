@@ -1,7 +1,10 @@
 var mongoose = require('mongoose');
-    Schema = mongoose.Schema;
-    User = require('./user');
-    Activity = require('./activity');
+var Schema = mongoose.Schema;
+var User = mongoose.model('User');
+var Activity = mongoose.model('Activity');
+    
+
+//var Activity = require('./activity');
 
 var raceSchema = new Schema({
     name : {type : String, required : true},
@@ -12,30 +15,29 @@ var raceSchema = new Schema({
 	activities : [{type : Schema.Types.ObjectId, ref:"activity"}]
 });
 
-var race = mongoose.model('race', raceSchema);
 
 raceSchema.path('users').validate(function (value, respond) {
 
-    User.findOne({_id: value}, function (err, doc) {
+    /*User.findOne({_id: value}, function (err, doc) {
         if (err || !doc) {
             respond(false);
         } else {
             respond(true);
         }
-    });
-
+    });*/
+    respond(true);
 }, 'Race does not exist');
 
 raceSchema.path('activities').validate(function (value, respond) {
 
-    Activity.findOne({_id: value}, function (err, doc) {
+    /*Activity.findOne({_id: value}, function (err, doc) {
         if (err || !doc) {
             respond(false);
         } else {
             respond(true);
         }
-    });
-
+    });*/
+respond(true);
 }, 'Activity does not exist');
 
     // validate startDateTime is not expired
@@ -47,3 +49,5 @@ raceSchema.path('startDateTime').validate(function(){
 raceSchema.path('endDateTime').validate(function(){
         return this.endDateTime > this.startDateTime;
     }, 'End date time must be after the start date time');
+
+var Race = mongoose.model('Race', raceSchema);

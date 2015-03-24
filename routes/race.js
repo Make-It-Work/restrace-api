@@ -14,10 +14,14 @@ router.get('/', function (req,res,next){
 	//Post a new race
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
-		var race = new Race(req.body.race);
+		var race = new Race(req.body);
 
-		race.save(function (err, race){
-			res.send({msg: "race with id" + race._id + " has succesfully been added"});
+		race.save(function (err){
+			if(err){
+				res.send(err);
+			} else {
+				res.send({msg: "race with id" + race._id + " has succesfully been added"});
+			}
 		});
 	});
 	

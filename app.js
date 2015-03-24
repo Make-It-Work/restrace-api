@@ -41,22 +41,29 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
+// Models ======================================================================
+require('./models/place.js');
+require('./models/activity.js');
+require('./models/race.js');
+
 // routes ======================================================================
 require('./routes/authentication.js')(app, passport); // load our routes and pass in our app and fully configured passport
 var test = require('./routes/test.js');
 app.use('/test', test);
 
 var race = require('./routes/race.js');
-var raceRouter = race(connection.model('race'));
+var raceRouter = race(mongoose.model('Race'));
 app.use('/race', raceRouter);
 
 var activity = require('./routes/activity.js');
-var activityRouter = activity(connection.model('activity'));
+var activityRouter = activity(connection.model('Activity'));
 app.use('/activity', activityRouter);
 
 var place = require('./routes/place.js');
-var placeRouter = place(connection.model('place'));
+var placeRouter = place(connection.model('Place'));
 app.use('/place', placeRouter);
+
+//require('./Models/user.js');
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
