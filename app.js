@@ -1,5 +1,3 @@
-// server.js
-
 // set up ======================================================================
 // get all the tools we need
 var express  = require('express');
@@ -47,9 +45,18 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./routes/authentication.js')(app, passport); // load our routes and pass in our app and fully configured passport
 var test = require('./routes/test.js');
 app.use('/test', test);
+
 var race = require('./routes/race.js');
 var raceRouter = race(connection.model('race'));
 app.use('/race', raceRouter);
+
+var activity = require('./routes/activity.js');
+var activityRouter = activity(connection.model('activity'));
+app.use('/activity', activityRouter);
+
+var place = require('./routes/place.js');
+var placeRouter = place(connection.model('place'));
+app.use('/place', placeRouter);
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
