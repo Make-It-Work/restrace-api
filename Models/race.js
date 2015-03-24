@@ -4,10 +4,12 @@ var mongoose = require('mongoose');
     Activity = require('./activity');
 
 var raceSchema = new Schema({
+    name : {type : String, required : true},
+    description : {type : String, required : true},
 	users : [{type : mongoose.Schema.Types.ObjectId, ref:"user"}],
 	startDateTime : {type : Date, default : Date.now, required : true},
 	endDateTime : {type : Date, required : true},
-	activities : [{type : Schema.Types.ObjectId, ref:"activity", required : true}]
+	activities : [{type : Schema.Types.ObjectId, ref:"activity"}]
 });
 
 var race = mongoose.model('race', raceSchema);
