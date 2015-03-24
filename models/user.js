@@ -22,15 +22,15 @@ var userSchema = Schema({
 });
 
     // validate race_id is existing race
-userSchema.path('races').validate(function(){
-    Race.findOne({_id: value}, function (err, doc) {
-        if (err || !doc) {
-            respond(false);
-        } else {
-            respond(true);
-        }
-    });
-    }, 'Invalid race id');
+// userSchema.path('races').validate(function(){
+//     Race.findOne({_id: value}, function (err, doc) {
+//         if (err || !doc) {
+//             respond(false);
+//         } else {
+//             respond(true);
+//         }
+//     });
+//     }, 'Invalid race id');
 
 // methods ======================
 // generating a hash
