@@ -2,11 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var placeSchema = new Schema({
-	location            : {
+    google_id : String, 
+    name : String,
+    Address : String,	
+    location            : {
         lat  : Boolean,
         lng  : Boolean,
-    },
-    name : String
+    }
 });
 
 mongoose.model('place', placeSchema);
