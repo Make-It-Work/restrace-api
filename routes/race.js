@@ -44,7 +44,26 @@ router.delete('/:id', function (req, res, next){
 	//Update a race
 	//------------------------------PUT--------------------------------
 router.put('/:id', function (req, res, next){
-			//geen idee hoe
+	var db = req.db;
+	var id = req.params.id;
+	var body = req.body;
+	Race.findById(id, function (err, race) {
+		if (err) {
+			res.send(err);
+		} else {
+			for(var key in body) {
+				race[key] = body[key];
+			}
+			console.log(race);
+			race.save(function (err) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.send("Updated race with id " + id + "succesfully");
+				}
+			});
+		}
+    });
 });
 
 module.exports = function(RaceSchema) {
