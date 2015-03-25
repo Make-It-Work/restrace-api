@@ -60,7 +60,7 @@ router.put('/:id', function (req, res, next){
 				if (err) {
 					res.send(err);
 				} else {
-					res.send("Updated race with id " + id + "succesfully");
+					res.send("Updated race with id " + id + " succesfully");
 				}
 			});
 		}
