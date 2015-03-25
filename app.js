@@ -21,7 +21,11 @@ var allowCrossDomain = function(req, res, next) {
 
     next();
 }
-
+// Models ======================================================================
+require('./models/user.js');
+require('./models/place.js');
+require('./models/activity.js');
+require('./models/race.js');
 // configuration ===============================================================
 var connection = mongoose.connect(configDB.url); // connect to our database
 
@@ -41,13 +45,9 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// Models ======================================================================
-require('./models/place.js');
-require('./models/activity.js');
-require('./models/race.js');
-
 // routes ======================================================================
 require('./routes/authentication.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
 var test = require('./routes/test.js');
 app.use('/test', test);
 
@@ -63,7 +63,6 @@ var place = require('./routes/place.js');
 var placeRouter = place(connection.model('Place'));
 app.use('/place', placeRouter);
 
-//require('./Models/user.js');
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);

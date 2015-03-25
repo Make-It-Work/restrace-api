@@ -1,9 +1,10 @@
 // load all the things we need
 var LocalStrategy    = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var mongoose = require('mongoose');
 
 // load up the user model
-var User       = require('../models/user');
+var User = mongoose.model('User');
 
 // load the auth variables
 var configAuth = require('./auth'); // use this one for testing
