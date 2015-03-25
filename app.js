@@ -48,8 +48,21 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // routes ======================================================================
 require('./routes/authentication.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
+// route middleware to ensure user is logged in
+function isLoggedIn(req, res, next) {
+	console.log(req.isAuthenticated());
+	if (req.isAuthenticated())
+		return next();
+
+	if (req.query.returnType === 'json') {
+		res.send({ msg: 'You are not logged in.'});	
+	} else {
+		res.redirect('/');
+	}
+};
+
 var test = require('./routes/test.js');
-app.use('/test', test);
+app.use('/test', isLoggedIn, test);
 
 var race = require('./routes/race.js');
 var raceRouter = race(mongoose.model('Race'));
