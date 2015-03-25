@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 	
 var Race;
+var Activity;
 
 	//get all the races
 	//-----------------------------GET------------------------
@@ -66,7 +67,27 @@ router.put('/:id', function (req, res, next){
     });
 });
 
-module.exports = function(RaceSchema) {
+
+	//Get activities of an existing race
+	//------------------------------GET----------------------- 
+router.get('/:id/activities', function (req, res, next){
+		Race.findOne({_id:req.params.id}, function (err, result){
+			if(err){
+				res.send(err);
+			}
+			else{
+				for(var key in res.body.activities){
+					Activity.findById(key)
+				}
+			}
+
+			res.send(result);
+		});
+	})
+
+
+module.exports = function(RaceSchema, ActivitySchema) {
 	Race = RaceSchema;
+	Activity = ActivitySchema;
 	return router;
 }

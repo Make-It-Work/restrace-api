@@ -4,13 +4,7 @@ var router = express.Router();
 	
 var Activity;
 
-	//get all the activities
-	//-----------------------------GET------------------------
-router.get('/', function (req,res,next){
-		Activity.find(function(err, result){
-			res.json(result);
-		});
-	})
+
 	//Post a new activity
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
