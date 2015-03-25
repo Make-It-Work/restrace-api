@@ -26,6 +26,8 @@ require('./models/user.js');
 require('./models/place.js');
 require('./models/activity.js');
 require('./models/race.js');
+require('./models/tag.js');
+
 // configuration ===============================================================
 var connection = mongoose.connect(configDB.url); // connect to our database
 
@@ -62,6 +64,10 @@ app.use('/activity', activityRouter);
 var place = require('./routes/place.js');
 var placeRouter = place(connection.model('Place'));
 app.use('/place', placeRouter);
+
+var tag = require('./routes/tag.js');
+var tagRouter = place(connection.model('Tag'));
+app.use('/tag', tagRouter);
 
 // launch ======================================================================
 app.listen(port);

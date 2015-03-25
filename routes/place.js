@@ -14,10 +14,14 @@ router.get('/', function (req,res,next){
 	//Post a new place
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
-		var place = new Race(req.body.place);
+		var place = new Place(req.body);
 
-		place.save(function (err, place){
-			res.send({msg: "place with id" + place._id + " has succesfully been added"});
+		place.save(function (err){
+			if(err){
+				res.send(err);
+			} else {
+				res.send({msg: "place with id" + place._id + " has succesfully been added"});
+			}
 		});
 	});
 	
@@ -40,7 +44,26 @@ router.delete('/:id', function (req, res, next){
 	//Update a place
 	//------------------------------PUT--------------------------------
 router.put('/:id', function (req, res, next){
-			//geen idee hoe
+	var db = req.db;
+	var id = req.params.id;
+	var body = req.body;
+	Place.findById(id, function (err, place) {
+		if (err) {
+			res.send(err);
+		} else {
+			for(var key in body) {
+				place[key] = body[key];
+			}
+			console.log(place);
+			place.save(function (err) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.send("Updated place with id " + id + "succesfully");
+				}
+			});
+		}
+    });
 });
 
 module.exports = function(PlaceSchema) {

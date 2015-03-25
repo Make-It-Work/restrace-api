@@ -14,10 +14,14 @@ router.get('/', function (req,res,next){
 	//Post a new activity
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
-		var activity = new Activity(req.body.activity);
+		var activity = new Activity(req.body);
 
-		activity.save(function (err, activity){
-			res.send({msg: "activity with id" + activity._id + " has succesfully been added"});
+		activity.save(function (err){
+			if(err){
+				res.send(err);
+			} else {
+				res.send({msg: "activity with id" + activity._id + " has succesfully been added"});
+			}
 		});
 	});
 	
@@ -40,7 +44,26 @@ router.delete('/:id', function (req, res, next){
 	//Update a activity
 	//------------------------------PUT--------------------------------
 router.put('/:id', function (req, res, next){
-			//geen idee hoe
+	var db = req.db;
+	var id = req.params.id;
+	var body = req.body;
+	Activity.findById(id, function (err, activity) {
+		if (err) {
+			res.send(err);
+		} else {
+			for(var key in body) {
+				activity[key] = body[key];
+			}
+			console.log(act);
+			activity.save(function (err) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.send("Updated activity with id " + id + "succesfully");
+				}
+			});
+		}
+    });
 });
 
 module.exports = function(ActivitySchema) {

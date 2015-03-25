@@ -1,18 +1,17 @@
 var mongoose = require('mongoose');
-	Schema = mongoose.Schema;
-	User = require('./user');
-	Activity = require('./activity');
+var	Schema = mongoose.Schema;
+var User = mongoose.model('User');
+var Activity = mongoose.model('Activity');
 
+//------------------------------------Schema-----------------------------------------------------------
 var tagSchema = new Schema ({
 	user_id : {type : Schema.Types.ObjectId, ref:"user", required:true},
 	activity_id : {type : Schema.Types.ObjectId, ref:"activity", required:true},	
 	dateTime : {type : Date, default: Date.now, value : Date.now, required:true}
 });
 
-mongoose.model('tag', tagSchema);
-
+//----------------------------------Validation-------------------------------------------------------------------
 tagSchema.path('user_id').validate(function (value, respond) {
-
     User.findOne({_id: value}, function (err, doc) {
         if (err || !doc) {
             respond(false);
@@ -21,10 +20,9 @@ tagSchema.path('user_id').validate(function (value, respond) {
         }
     });
 
-}, 'Race does not exist');
+}, 'User does not exist');
 
 tagSchema.path('activity_id').validate(function (value, respond) {
-
     Activity.findOne({_id: value}, function (err, doc) {
         if (err || !doc) {
             respond(false);
@@ -35,6 +33,7 @@ tagSchema.path('activity_id').validate(function (value, respond) {
 
 }, 'Activity does not exist');
 
-tagSchema.path('dateTime').validate(function(){
-	return this.dateTime >= new Date();
-}, 'Date time can not be in the past');
+
+
+
+mongoose.model('Tag', tagSchema);
