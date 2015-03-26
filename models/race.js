@@ -8,10 +8,10 @@ var raceSchema = new Schema({
     name : {type : String, required : true},
     description : {type : String, required : true},
     owner : {type : mongoose.Schema.Types.ObjectId, ref:"user", required : true},
-	users : [{type : mongoose.Schema.Types.ObjectId, ref:"user"}],
+	users : [{type : mongoose.Schema.Types.ObjectId, ref:"user", unique: true}],
 	startDateTime : {type : Date, default : Date.now, required : true},
 	endDateTime : {type : Date, required : true},
-	activities : [{type : Schema.Types.ObjectId, ref:"activity"}]
+	activities : [{type : Schema.Types.ObjectId, ref:"activity", required : true}]
 });
 
 //---------------------------------------------Validation----------------------------------------------------------------

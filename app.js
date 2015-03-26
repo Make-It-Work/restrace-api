@@ -79,7 +79,7 @@ var placeRouter = place(connection.model('Place'));
 app.use('/place', placeRouter);
 
 var tag = require('./routes/tag.js');
-var tagRouter = place(connection.model('Tag'));
+var tagRouter = tag(connection.model('Tag'));
 app.use('/tag', tagRouter);
 
 // launch ======================================================================
