@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec"
   },
   "dependencies": {
     "express": "~4.11.1",
@@ -22,5 +23,10 @@
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0",
     "express-session": "~1.0.0"
+  },
+    "devDependencies": {
+    "chai": "^2.1.2",
+    "mocha": "^2.2.1",
+    "supertest": "^0.15.0"
   }
 }
