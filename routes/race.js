@@ -7,6 +7,37 @@ var Race;
 var Activity = mongoose.model('Activity');
 var User = mongoose.model('User');
 
+// Add a user to a race
+	//-------------------------POST USER------------------------------------------
+router.post('/:id/user/:user_id', function (req, res, next){
+	Race.findOne({_id:req.params.id}, function (err, race){
+		if(err){
+			res.json(err);
+		}
+		else{
+			User.findOne({_id : req.params.user_id}, function (err, user){
+				if(err){
+					res.json(err);
+				}
+				else{
+					race.users.push(user.id);				
+					race.save(function (err){
+						if(err){
+							res.send(err);
+						}
+						else{
+							res.send("User "+ user.id +" succesfully added");
+						}
+					});
+				
+				}
+			});
+		}
+
+	});
+});
+
+
 	//get all the races
 	//-----------------------------GET------------------------
 router.get('/', function (req,res,next){
@@ -184,36 +215,7 @@ router.post('/:id/activity/:activity_id', function (req, res, next){
 	});
 });
 
-// Add a user to a race
-	//-------------------------POST USER------------------------------------------
-router.post('/:id/user/:user_id', function (req, res, next){
-	Race.findOne({_id:req.params.id}, function (err, race){
-		if(err){
-			res.json(err);
-		}
-		else{
-			User.findOne({_id : req.params.user_id}, function (err, user){
-				if(err){
-					res.json(err);
-				}
-				else{
-					race.users.push(user.id);				
-					race.save(function (err){
-						if(err){
-							res.send(err);
-						}
-						else{
-							res.send("User "+ user.id +" succesfully added");
-						}
-					});
-				
-				}
-			});
-		}
-
-	});
-});
-
+	
 	// Delete a activity of a race
 	//-------------------------DELETE ACTIVITY------------------------------------------
 router.delete('/:id/activity/:activity_id', function (req, res, next){
