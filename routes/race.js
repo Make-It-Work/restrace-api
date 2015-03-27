@@ -23,7 +23,7 @@ router.post('/:id/user/:user_id', function (req, res, next){
 					race.users.push(user.id);				
 					race.save(function (err){
 						if(err){
-							res.send(err);
+							res.send({ zitHij: 'hierin?', err: err });
 						}
 						else{
 							res.send("User "+ user.id +" succesfully added");
