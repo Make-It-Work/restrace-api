@@ -11,7 +11,7 @@ var raceSchema = new Schema({
 	users : [{type : mongoose.Schema.Types.ObjectId, ref:"user", unique: true}],
 	startDateTime : {type : Date, default : Date.now, required : true},
 	endDateTime : {type : Date, required : true},
-	activities : [{type : Schema.Types.ObjectId, ref:"activity", required : true}]
+	activities : [{type : Schema.Types.ObjectId, ref:"activity", unique : true}]
 });
 
 //---------------------------------------------Validation----------------------------------------------------------------

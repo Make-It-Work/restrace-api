@@ -7,19 +7,22 @@ var Place;
 	//get all the places
 	//-----------------------------GET------------------------
 router.get('/', function (req,res,next){
-		Place.find(function(err, result){
-			res.json(result);
-		});
+		var result = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyAUxO0NYgx05X4imuydcq4iKr2kGtWjIZI&location="+req.LAT+","+ req.LONG>+"&radius="+req.meters+"&type=cafe";
+		console.log(req.lat);
+		res.json(result);
 	})
 	//Post a new place
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
 		var place = new Place(req.body);
-
+		console.log(place);
+		console.log('--------------------------------------------------');
 		place.save(function (err){
 			if(err){
+				console.log(err);
 				res.send(err);
 			} else {
+				console.log(place);
 				res.send({msg: "place with id" + place._id + " has succesfully been added"});
 			}
 		});
@@ -29,7 +32,9 @@ router.post('/', function (req, res, next){
 	//------------------------------GET----------------------- 
 router.get('/:id', function (req, res, next){
 		Place.findOne({_id:req.params.id}, function (err, place){
-			res.json(place);
+		
+			var result = "https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyA5Pi_VFtn3qtvxTfpMFWArykEvgGkkifE&placeid="+place.google_id;
+			res.json(result);
 		});
 	})
 
