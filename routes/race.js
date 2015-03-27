@@ -203,7 +203,7 @@ router.post('/:id/user/:user_id', function (req, res, next){
 							res.send(err);
 						}
 						else{
-							res.json(msg:"User "+ user.id +" succesfully added");
+							res.send("User "+ user.id +" succesfully added");
 						}
 					});
 				
