@@ -12,7 +12,7 @@ var User = mongoose.model('User');
 router.post('/:id/user/:user_id', function (req, res, next){
 	Race.findOne({_id:req.params.id}, function (err, race){
 		if(err){
-			res.json(err);
+			res.json({ route: '/:id/user/:user_id', err: err });
 		}
 		else{
 			User.findOne({_id : req.params.user_id}, function (err, user){
@@ -52,7 +52,8 @@ router.post('/', function (req, res, next){
 
 		race.save(function (err){
 			if(err){
-				res.send(err);
+				res.json({ route: '/', err: err });
+				//res.send(err);
 			} else {
 				res.send({msg: "race with id" + race._id + " has succesfully been added"});
 			}
