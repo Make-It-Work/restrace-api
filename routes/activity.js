@@ -9,7 +9,6 @@ var Activity;
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
 		var activity = new Activity(req.body);
-
 		activity.save(function (err){
 			if(err){
 				res.send(err);
@@ -23,6 +22,7 @@ router.post('/', function (req, res, next){
 	//------------------------------GET----------------------- 
 router.get('/:id', function (req, res, next){
 		Activity.findOne({_id:req.params.id}, function (err, activity){
+			if(activity === undefined){return res.status(400).end('Wrong activity id');}
 			res.json(activity);
 		});
 	})

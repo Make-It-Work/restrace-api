@@ -32,6 +32,7 @@ router.post('/', function (req, res, next){
 	//------------------------------GET----------------------- 
 router.get('/:id', function (req, res, next){
 		Race.findOne({_id:req.params.id}, function (err, race){
+			if(race === undefined){return res.status(400).end('Wrong race id');}
 			res.send(race);
 		});
 	})
