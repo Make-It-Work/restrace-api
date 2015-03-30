@@ -4,7 +4,7 @@ var	Place = mongoose.model('Place');
 
 //--------------------------------Schema----------------------------------------------------
 var activitySchema = new Schema({
-    google_id : {type : Number, ref:"place", required:true},
+    google_id : {type : String, ref:"place", required:true},
 	description : {type : String, required : true}
 });
 
