@@ -9,7 +9,7 @@ var User = mongoose.model('User');
 
 	//get all the races
 	//-----------------------------GET------------------------
-router.get('/', function (req,res,next){
+router.get('/', function (req,res){
 		Race.find(function(err, result){
 			res.json(result);
 		});
@@ -81,20 +81,33 @@ router.get('/:id/activities', function (req, res, next){
 				res.send(err);
 			}
 			else{
-				/*var users = [];
-				console.log("else============================================");
-				for(var index = 0; index< race.activities.length; index++){
-					console.log("in for--------------------------------------------------------");
-						Activity.findOne({_id: race.activities[index]}, function (err, activity){
-						console.log(activity);
-						setArray(activity);
-					});
-				}
+ 				var activities = [];
+ 				var functions = [];
 
-				function setArray(user){
-					users.push(user);
-				}*/
-				res.send(race.activities);
+ 				for(var index = 0; index< race.activities.length; index++){
+
+	 				async.series([	 	
+		 				function(callback){	
+		 					var number = index;		
+			 					function getObject(callback){
+			 						Activity.findOne({_id: race.activities[number]}, function(err, activity){
+										if(err){ return callback (null, err);}
+										console.log(number);
+										callback(null, activity);
+									});						
+			 					}
+			 				functions.push(getObject);
+			 			}
+		 			])
+ 				};
+
+				async.parallel(functions,
+					// optional callback 
+					function(err, activity){		   
+				    	activities.push(activity);
+						res.json(activity);
+					}
+				);	
 			}
 		});
 });
@@ -108,49 +121,32 @@ router.get('/:id/users', function (req, res, next){
 				res.send(err);
 			}
 			else{
- 				/*var users = [];
-				async.series([
-				    function(callback){
-				     //   var users = [];
-						for(var index = 0; index< race.users.length; index++){
-							console.log("in for--------------------------------------------------------");
-								User.findOne({_id: race.users[index]}, function (err, user){
-									//users.push(user);
-									console.log('add');
-									 //setArray(user);
-								});
-							console.log(race.users[index]);
-						}
-				       callback(null, users);
-				    },
+ 				var functions = [];
 
-				    function(user, callback){
-				        users.push(user);
-				    	console.log("set array"); 
-				        callback(null, 'done');
-    				}
-				],
-				// optional callback 
-				function(err, user){
-				    //res.send(users);
-				    users.push(user);
-					console.log("Moet laatste");
-					res.send(users);
-				});
+ 				for(var index = 0; index< race.users.length; index++){
 
+	 				async.series([	 	
+		 				function(callback){	
+		 					var number = index;		
+			 					function getObject(callback){
+			 						User.findOne({_id: race.users[number]}, function(err, user){
+										if(err){ return callback (null, err);}
+										console.log(number);
+										callback(null, user);
+									});						
+			 					}
+			 				functions.push(getObject);
+			 			}
+		 			])
+ 				};
 
-				console.log("else============================================");
-				var users = [];
-				for(var index = 0; index< race.users.length; index++){
-					console.log("in for--------------------------------------------------------");
-					User.findOne({_id: race.users[index]}, function (err, user){
-						users.push(user);
-					});
-					console.log(race.users[index]);
-				}*/
-	}
-				res.send(race.users);
-			
+				async.parallel(functions,
+					// optional callback 
+					function(err, user){		   
+						res.json(user);
+					}
+				);				
+			}		
 		});
 });
 
