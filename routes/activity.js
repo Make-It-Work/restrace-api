@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
-	
-var Activity;
+var request = require('request');	
 
+var Activity;
 
 	//Post a new activity
 	//------------------------------POST--------------------------
@@ -23,7 +23,16 @@ router.post('/', function (req, res, next){
 router.get('/:id', function (req, res, next){
 		Activity.findOne({_id:req.params.id}, function (err, activity){
 			if(activity === undefined){return res.status(400).end('Wrong activity id');}
-			res.json(activity);
+			
+			var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyA5Pi_VFtn3qtvxTfpMFWArykEvgGkkifE&placeid='+activity.google_id;
+
+            request.get({url: url}, function(e, r, result) {
+                result = JSON.parse(result);   
+                var results = [];
+                results.push(activity);
+                results.push(result);                
+                res.json(results);
+            });
 		});
 	})
 
