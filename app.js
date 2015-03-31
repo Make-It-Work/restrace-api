@@ -23,10 +23,10 @@ var allowCrossDomain = function(req, res, next) {
 }
 // Models ======================================================================
 require('./models/user.js');
+require('./models/tag.js');
 require('./models/place.js');
 require('./models/activity.js');
 require('./models/race.js');
-require('./models/tag.js');
 
 // configuration ===============================================================
 var connection = mongoose.connect(configDB.url); // connect to our database
@@ -85,3 +85,5 @@ app.use('/tag', tagRouter);
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
+
+module.exports = app;

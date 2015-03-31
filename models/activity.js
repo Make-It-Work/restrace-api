@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
 var	Schema = mongoose.Schema;
 var	Place = mongoose.model('Place');
+var Tag = mongoose.model('Tag');
 
 //--------------------------------Schema----------------------------------------------------
 var activitySchema = new Schema({
     google_id : {type : String, ref:"place", required:true},
-	description : {type : String, required : true}
+	description : {type : String, required : true},
+    tags : [{type : Schema.Types.ObjectId, ref:"tag"}]
 });
 
 //--------------------------------Validation----------------------------------------------------

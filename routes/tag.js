@@ -4,31 +4,11 @@ var router = express.Router();
     
 var Tag;
 
-    //get all the tags
-    //-----------------------------GET------------------------
-router.get('/', function (req,res,next){
-        Tag.find(function(err, result){
-            res.json(result);
-        });
-    })
-    //Post a new tag
-    //------------------------------POST--------------------------
-router.post('/', function (req, res, next){
-        var tag = new Tag(req.body);
-
-        tag.save(function (err){
-            if(err){
-                res.send(err);
-            } else {
-                res.send({msg: "tag with id" + tag._id + " has succesfully been added"});
-            }
-        });
-    });
-    
-    //Get an existing tagtag
+    //Get an existing tag
     //------------------------------GET----------------------- 
 router.get('/:id', function (req, res, next){
         Tag.findOne({_id:req.params.id}, function (err, tag){
+            if(tag === undefined || err){return res.status(400).end('Wrong tag id');}
             res.send(tag);
         });
     })
@@ -37,6 +17,7 @@ router.get('/:id', function (req, res, next){
     //-------------------------------DELETE---------------------------
 router.delete('/:id', function (req, res, next){
         Tag.remove({_id:req.params.id}, function (err){
+            if(err){ return res.status(400).end('wrong tag id');}
             res.send({msg: "tag with id" + req.params.id + " has succesfully been deleted."});
         });
     })
@@ -49,15 +30,14 @@ router.put('/:id', function (req, res, next){
     var body = req.body;
     Tag.findById(id, function (err, tag) {
         if (err) {
-            res.send(err);
+            return res.status(400).end('Wrong input'+err);
         } else {
             for(var key in body) {
                 tag[key] = body[key];
             }
-            console.log(tag);
             tag.save(function (err) {
                 if (err) {
-                    res.send(err);
+                    return res.status(400).end('wrong input params'+err);
                 } else {
                     res.send("Updated tag with id " + id + "succesfully");
                 }
