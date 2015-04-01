@@ -117,9 +117,9 @@ router.post('/:id/tag', function (req, res, next){
 			else{
 				var tag = new Tag(req.body);
 				
-				tag.save(function(err){
+				tag.save(function (err){
 					if(err){
-						return res.status(400).end('Tag could not be saved');
+						return res.status(400).end('Tag could not be saved'+err);
 					} 
 				});
 
