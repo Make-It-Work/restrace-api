@@ -4,7 +4,6 @@ var router = express.Router();
 var request = require('request');	
 var async = require('async');
 
-
 var Activity;
 var Tag = mongoose.model('Tag');
 
@@ -27,7 +26,7 @@ router.get('/:id', function (req, res, next){
 		Activity.findOne({_id:req.params.id}, function (err, activity){
 			if(activity === undefined){return res.status(400).end('Wrong activity id');}
 			
-			var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyD9_sdUtB7HA7BMx53m6uX45kN55zrbn9k&placeid='+activity.google_id;
+			var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAB3wNP3s9QgUApH-OTx4BZw01xLgeqmcE&placeid='+activity.google_id;
 
             request.get({url: url}, function(e, r, result) {
                 result = JSON.parse(result);   
@@ -81,7 +80,7 @@ router.get('/:id/tags', function(req, res, next){
 			}
 			else{
 				if(activity === null){ return res.status(400).end('no activity');}
-				if(activity.tags === undefined){ console.log("erroorrr");return res.status(400).end('No tags');}
+				if(activity.tags === undefined){ return res.status(400).end('No tags');}
  				var functions = [];
 
  				for(var index = 0; index< activity.tags.length; index++){
@@ -134,8 +133,6 @@ router.post('/:id/tag', function (req, res, next){
 						});
 					}
 				});
-
-
 			}
 	});
 });
