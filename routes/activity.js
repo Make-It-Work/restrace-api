@@ -4,8 +4,6 @@ var router = express.Router();
 var request = require('request');	
 var async = require('async');
 
-var http = require('http').Server(express);
-var io = require('socket.io')(http);
 
 var Activity;
 var Tag = mongoose.model('Tag');
