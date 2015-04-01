@@ -11,11 +11,7 @@ var User = mongoose.model('User');
 	//-----------------------------GET------------------------
 router.get('/', function (req,res){
 		Race.find(function(err, result){
-			if (req.query.returnType === 'json') {
-				res.json(result);	
-			} else {
-				res.render('races/races.ejs', result);
-			}			
+			res.json(result);
 		});
 	})
 	//Post a new race
@@ -36,7 +32,7 @@ router.post('/', function (req, res, next){
 	//------------------------------GET----------------------- 
 router.get('/:id', function (req, res, next){
 		Race.findOne({_id:req.params.id}, function (err, race){
-			if(err){ return res.status(400).end('Wrong race id');}
+			if(race === undefined){return res.status(400).end('Wrong race id');}
 			res.send(race);
 		});
 	})
