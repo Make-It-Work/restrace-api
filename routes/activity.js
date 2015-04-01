@@ -4,6 +4,9 @@ var router = express.Router();
 var request = require('request');	
 var async = require('async');
 
+var http = require('http').Server(express);
+var io = require('socket.io')(http);
+
 var Activity;
 var Tag = mongoose.model('Tag');
 
@@ -26,7 +29,7 @@ router.get('/:id', function (req, res, next){
 		Activity.findOne({_id:req.params.id}, function (err, activity){
 			if(activity === undefined){return res.status(400).end('Wrong activity id');}
 			
-			var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyA5Pi_VFtn3qtvxTfpMFWArykEvgGkkifE&placeid='+activity.google_id;
+			var url = 'https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyD9_sdUtB7HA7BMx53m6uX45kN55zrbn9k&placeid='+activity.google_id;
 
             request.get({url: url}, function(e, r, result) {
                 result = JSON.parse(result);   
