@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+.raceHistory{
+	width:100%;
+	max-width:100%;
+}
+
+.raceHistory > li{
+	width:100%;
+}
