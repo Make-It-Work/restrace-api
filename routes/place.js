@@ -8,48 +8,18 @@ var Place;
 	//get all the places
 	//-----------------------------GET------------------------
 router.get('/', function (req,res,next){
-	var placesget = {
-		host : 'maps.googleapis.com',
-		port: 443,
-		path: '/maps/api/place/nearbysearch/json?key=AIzaSyAUxO0NYgx05X4imuydcq4iKr2kGtWjIZI&location='+51.42+','+ 5.17+'&radius='+50000+'&type=cafe',
-		method: 'GET'
-	};
-
-	var data = [];
-			var klok = "klok";
-		data.push(klok);
-		
-	var reqget = https.request(placesget, function(res){
-		console.log("statuscode: "+res.statusCode);
-		res.on('data', function(d){
-			process.stdout.write
-			data.push(JSON.stringify(d));
-			console.log('----------------------');
-			console.log(res.body);
-		});
-	});
-
-
-		reqget.end();
-		reqget.on('error', function(e){
-			console.log(e);
-		});
-			console.log("========== helllo======="+data);
-		 res.json(data);
-		
+		Place.find(function(err, result){
+			res.json(result);
+		});		
 });
 	//Post a new place
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){
 		var place = new Place(req.body);
-		console.log(place);
-		console.log('--------------------------------------------------');
 		place.save(function (err){
 			if(err){
-				console.log(err);
 				res.send(err);
 			} else {
-				console.log(place);
 				res.send({msg: "place with id" + place._id + " has succesfully been added"});
 			}
 		});
@@ -86,7 +56,6 @@ router.put('/:id', function (req, res, next){
 			for(var key in body) {
 				place[key] = body[key];
 			}
-			console.log(place);
 			place.save(function (err) {
 				if (err) {
 					res.send(err);

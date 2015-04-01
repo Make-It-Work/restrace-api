@@ -184,18 +184,14 @@ router.post('/:id/activity/:activity_id', function (req, res, next){
 	// Add a user to a race
 	//-------------------------POST USER------------------------------------------
 router.post('/:id/user/:user_id', function (req, res, next){
-			console.log("hellooo");
 	Race.findOne({_id:req.params.id}, function (err, race){
 
 		if(err){
-			console.log("errrooorr :o");
 			return res.status(400).end('Wrong race id');
 		}
 		else{
-			console.log("elseeeeeee");
 			if(race === undefined){return res.status(400).end('Wrong race id');}
 			User.findOne({_id : req.params.user_id}, function (err, user){
-				console.log("found usserrr")
 				if(err){
 					return res.status(400).end('Wrong user id');
 				}
@@ -258,7 +254,7 @@ router.delete('/:id/user/:user_id', function (req, res, next){
 			return res.status(400).end('Wrong race id');
 		}
 		else{
-			if(race === undefined){return res.status(400).end('Wrong race id'); console.log("i am hereeee");}
+			if(race === undefined){return res.status(400).end('Wrong race id');}
 			User.findOne({_id : req.params.user_id}, function (err, user){
 				if(err){
 					return res.status(400).end('wrong user id');				

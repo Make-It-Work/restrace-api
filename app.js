@@ -63,9 +63,6 @@ function isLoggedIn(req, res, next) {
 	}
 };
 
-var test = require('./routes/test.js');
-app.use('/test', isLoggedIn, test);
-
 var race = require('./routes/race.js');
 var raceRouter = race(mongoose.model('Race'));
 app.use('/race', raceRouter);
