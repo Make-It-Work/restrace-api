@@ -79,32 +79,33 @@ router.get('/:id/tags', function(req, res, next){
 				return res.status(400).end('Wrong activity id');
 			}
 			else{
-				if(activity === null){ return res.status(400).end('no activity');}
-				if(activity.tags === undefined){ return res.status(400).end('No tags');}
- 				var functions = [];
+				if(activity === null || activity.tags ===undefined){ return res.status(400).end('no activity or no tags'+err);}
+				else{
+	 				var functions = [];
 
- 				for(var index = 0; index< activity.tags.length; index++){
+	 				for(var index = 0; index< activity.tags.length; index++){
 
-	 				async.series([	 	
-		 				function(callback){	
-		 					var number = index;		
-			 					function getObject(callback){
-			 						Tag.findOne({_id: activity.tags[number]}, function(err, tag){
-										if(err){ return callback (null, err);}
-										callback(null, tag);
-									});						
-			 					}
-			 				functions.push(getObject);
-			 			}
-		 			])
- 				};
+		 				async.series([	 	
+			 				function(callback){	
+			 					var number = index;		
+				 					function getObject(callback){
+				 						Tag.findOne({_id: activity.tags[number]}, function(err, tag){
+											if(err){ return callback (null, err);}
+											callback(null, tag);
+										});						
+				 					}
+				 				functions.push(getObject);
+				 			}
+			 			])
+	 				};
 
-				async.parallel(functions,
-					// optional callback 
-					function(err, tag){		  
-						res.json(tag);
-					}
-				);	
+					async.parallel(functions,
+						// optional callback 
+						function(err, tag){		  
+							res.json(tag);
+						}
+					);
+				}	
 			}
 		});
 });
