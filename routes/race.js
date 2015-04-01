@@ -21,7 +21,7 @@ router.post('/', function (req, res, next){
 
 		race.save(function (err){
 			if(err){
-				res.send(err);
+				return res.status(400).end('validation errors'+ err);
 			} else {
 				res.send({msg: "race with id" + race._id + " has succesfully been added"});
 			}
@@ -41,6 +41,7 @@ router.get('/:id', function (req, res, next){
 	//-------------------------------DELETE---------------------------
 router.delete('/:id', function (req, res, next){
 		Race.remove({_id:req.params.id}, function (err){
+			if(err){ return res.status(400).end('wrong race id');}
 			res.send({msg: "race with id" + req.params.id + " has succesfully been deleted."});
 		});
 	})
@@ -53,15 +54,15 @@ router.put('/:id', function (req, res, next){
 	var body = req.body;
 	Race.findById(id, function (err, race) {
 		if (err) {
-			res.send(err);
+			return res.status(400).end('Wrong race id');
 		} else {
+			if(race === null){ return res.status(400).end('no race');}
 			for(var key in body) {
 				race[key] = body[key];
 			}
-			console.log(race);
 			race.save(function (err) {
 				if (err) {
-					res.send(err);
+					return res.status(400).end('Params are wrong');
 				} else {
 					res.send("Updated race with id " + id + " succesfully");
 				}
@@ -82,7 +83,7 @@ router.get('/:id/activities', function (req, res, next){
 				res.send(err);
 			}
 			else{
- 				var activities = [];
+				if(race === undefined){return res.status(400).end('Wrong race id');}
  				var functions = [];
 
  				for(var index = 0; index< race.activities.length; index++){
@@ -93,7 +94,6 @@ router.get('/:id/activities', function (req, res, next){
 			 					function getObject(callback){
 			 						Activity.findOne({_id: race.activities[number]}, function(err, activity){
 										if(err){ return callback (null, err);}
-										console.log(number);
 										callback(null, activity);
 									});						
 			 					}
@@ -104,8 +104,7 @@ router.get('/:id/activities', function (req, res, next){
 
 				async.parallel(functions,
 					// optional callback 
-					function(err, activity){		   
-				    	activities.push(activity);
+					function(err, activity){		  
 						res.json(activity);
 					}
 				);	
@@ -122,17 +121,16 @@ router.get('/:id/users', function (req, res, next){
 				res.send(err);
 			}
 			else{
+				if(race === undefined){return res.status(400).end('Wrong race id');}
  				var functions = [];
 
  				for(var index = 0; index< race.users.length; index++){
-
 	 				async.series([	 	
 		 				function(callback){	
 		 					var number = index;		
 			 					function getObject(callback){
 			 						User.findOne({_id: race.users[number]}, function(err, user){
 										if(err){ return callback (null, err);}
-										console.log(number);
 										callback(null, user);
 									});						
 			 					}
@@ -159,11 +157,13 @@ router.post('/:id/activity/:activity_id', function (req, res, next){
 			res.json(err);
 		}
 		else{
+			if(race === undefined){return res.status(400).end('Wrong race id');}
 			Activity.findOne({_id : req.params.activity_id}, function (err, activity){
 				if(err){
 					res.json(err);
 				}
 				else{
+					if(activity === undefined){return res.status(400).end('Wrong activity id');}
 					race.activities.push(activity.id);				
 					race.save(function (err){
 						if(err){
@@ -184,20 +184,27 @@ router.post('/:id/activity/:activity_id', function (req, res, next){
 	// Add a user to a race
 	//-------------------------POST USER------------------------------------------
 router.post('/:id/user/:user_id', function (req, res, next){
+			console.log("hellooo");
 	Race.findOne({_id:req.params.id}, function (err, race){
+
 		if(err){
-			res.json(err);
+			console.log("errrooorr :o");
+			return res.status(400).end('Wrong race id');
 		}
 		else{
+			console.log("elseeeeeee");
+			if(race === undefined){return res.status(400).end('Wrong race id');}
 			User.findOne({_id : req.params.user_id}, function (err, user){
+				console.log("found usserrr")
 				if(err){
-					res.json(err);
+					return res.status(400).end('Wrong user id');
 				}
 				else{
+					if(user === undefined){return res.status(400).end('Wrong user id');}
 					race.users.push(user.id);				
 					race.save(function (err){
 						if(err){
-							res.send(err);
+							return res.status(400).end('can not save'+err);
 						}
 						else{
 							res.send("User "+ user.id +" succesfully added");
@@ -216,12 +223,13 @@ router.post('/:id/user/:user_id', function (req, res, next){
 router.delete('/:id/activity/:activity_id', function (req, res, next){
 	Race.findOne({_id:req.params.id}, function (err, race){
 		if(err){
-			res.json(err);
+			return res.status(400).end('Wrong race id');
 		}
 		else{
+			if(race === undefined){return res.status(400).end('Wrong race id');}
 			Activity.findOne({_id : req.params.activity_id}, function (err, activity){
 				if(err){
-					res.json(err);
+					return res.status(400).end('Wrong activity id');
 				}
 				else{
 					race.activities.remove(activity.id);				
@@ -247,12 +255,13 @@ router.delete('/:id/activity/:activity_id', function (req, res, next){
 router.delete('/:id/user/:user_id', function (req, res, next){
 	Race.findOne({_id:req.params.id}, function (err, race){
 		if(err){
-			res.json(err);
+			return res.status(400).end('Wrong race id');
 		}
 		else{
+			if(race === undefined){return res.status(400).end('Wrong race id'); console.log("i am hereeee");}
 			User.findOne({_id : req.params.user_id}, function (err, user){
 				if(err){
-					res.json(err);
+					return res.status(400).end('wrong user id');				
 				}
 				else{
 					race.users.remove(user.id);				

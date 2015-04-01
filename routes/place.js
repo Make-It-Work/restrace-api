@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var express = require('express');
+var https = require('https');
 var router = express.Router();
 	
 var Place;
@@ -7,10 +8,36 @@ var Place;
 	//get all the places
 	//-----------------------------GET------------------------
 router.get('/', function (req,res,next){
-		var result = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyAUxO0NYgx05X4imuydcq4iKr2kGtWjIZI&location="+req.LAT+","+ req.LONG>+"&radius="+req.meters+"&type=cafe";
-		console.log(req.lat);
-		res.json(result);
-	})
+	var placesget = {
+		host : 'maps.googleapis.com',
+		port: 443,
+		path: '/maps/api/place/nearbysearch/json?key=AIzaSyAUxO0NYgx05X4imuydcq4iKr2kGtWjIZI&location='+51.42+','+ 5.17+'&radius='+50000+'&type=cafe',
+		method: 'GET'
+	};
+
+	var data = [];
+			var klok = "klok";
+		data.push(klok);
+		
+	var reqget = https.request(placesget, function(res){
+		console.log("statuscode: "+res.statusCode);
+		res.on('data', function(d){
+			process.stdout.write
+			data.push(JSON.stringify(d));
+			console.log('----------------------');
+			console.log(res.body);
+		});
+	});
+
+
+		reqget.end();
+		reqget.on('error', function(e){
+			console.log(e);
+		});
+			console.log("========== helllo======="+data);
+		 res.json(data);
+		
+});
 	//Post a new place
 	//------------------------------POST--------------------------
 router.post('/', function (req, res, next){

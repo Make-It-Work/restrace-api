@@ -71,11 +71,11 @@ router.put('/:id', function (req, res, next){
     });
 });
 
+//---------------------------------------------TAGS-------------------------------
 //get all tags of an activity
 router.get('/:id/tags', function(req, res, next){
 	Activity.findOne({_id:req.params.id}, function (err, activity){
 			if(err){
-				console.log("kom ik hier");
 				return res.status(400).end('Wrong activity id');
 			}
 			else{
@@ -119,7 +119,7 @@ router.post('/:id/tag', function (req, res, next){
 				
 				tag.save(function(err){
 					if(err){
-						return res.status(400).end('Tag could not be saved'+err);
+						return res.status(400).end('Tag could not be saved');
 					} 
 				});
 

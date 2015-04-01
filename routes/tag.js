@@ -32,6 +32,7 @@ router.put('/:id', function (req, res, next){
         if (err) {
             return res.status(400).end('Wrong input'+err);
         } else {
+            if(tag === null){ return res.status(400).end('Wrong input'+err);}
             for(var key in body) {
                 tag[key] = body[key];
             }
