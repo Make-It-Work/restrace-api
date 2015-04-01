@@ -1,0 +1,96 @@
+//Mapping for the list of races to view models
+//----------------------------mapping----------------------------
+var mapping = {
+    'races': {
+        create: function(options) {
+            return new Race(options.data);
+        }
+    }
+}
+
+//Class for room with functions to update and delete
+//---------------------------class Race--------------------------
+function Race(data)
+{
+	var self = this;
+
+	//model properties
+	ko.mapping.fromJS(data, mapping, self);
+	
+	//View model properties
+	self.isSelected = ko.observable(false);
+	self.isNew = ko.observable(false);
+
+	debugger;
+
+	self.hasChanged = ko.computed(function(){
+		var result = (self.name() != data.name || self.description() != data.description || self.owner() != data.owner || self.users() != data.users||self.startDateTime() != data.startDateTime() || self.endDateTime() !=data.endDateTime || self.activities() != data.activities)
+		return result;
+	});
+}
+
+//Class for rooms overview 
+//----------------------class RoomViewModel----------------------
+function RaceViewModel()
+{
+	var self = this;
+		
+	self.races = ko.observableArray([]);
+	self.currentRace = ko.observable();
+
+
+
+	//Method: Add the current room to the new field
+	
+	self.addRace = function()
+	{
+		var race = ko.mapping.toJSON(self.currentRace());
+
+		$.ajax({
+		    url: '/race', 
+		    type: 'POST', 
+		    contentType: 'application/json', 
+		    data: '{"race": ' + race + "}",
+		    success: function(result)
+		    {
+		    	self.refresh();
+		    }
+		});
+	};
+
+	self.selectRace = function(race)
+	{
+		$.getJSON("/race/" + race._id() , function(race) { 
+			self.currentRace(new Race(race));
+		});
+	}
+
+	
+	//Method: Refresh current collection from server
+	self.refresh = function()
+	{
+		$.getJSON("/race", function(races) { 
+			self.races([]);
+			ko.mapping.fromJS({races: races}, mapping, self);
+		});
+	}
+
+	self.removeRace = function()
+	{
+		if(window.confirm("Are you sure you want to remove this race?")) 
+		{
+			$.ajax({
+			    url: '/race/' + self.currentRace()._id(),
+			    type: 'DELETE',
+			    success: function(result) {
+			        self.refresh();
+			        self.currentRace(null);
+			    }
+			});
+		}
+	}
+
+	//Init
+	self.refresh();
+}
+
