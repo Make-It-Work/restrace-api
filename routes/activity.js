@@ -148,12 +148,10 @@ router.delete('/:id/tag/:tag_id', function (req, res, next){
 					return res.status(400).end('Wrong tag id');
 				}
 				else{
-					Tag.remove(tag);
-					Tag.save(function(err){
-						if(err){
-							return res.status(400).end('Tag could not be saved'+err);
-						} 
+					Tag.remove({_id:tag.id}, function(err){
+						if(err){ return res.status(400).end('wrong tag id');}	
 					});
+	
 					activity.tags.remove(tag.id);				
 					activity.save(function (err){
 						if(err){
@@ -167,7 +165,6 @@ router.delete('/:id/tag/:tag_id', function (req, res, next){
 				}
 			});
 		}
-
 	});
 });
 
