@@ -120,19 +120,21 @@ router.post('/:id/tag', function (req, res, next){
 				tag.save(function (err){
 					if(err){
 						return res.status(400).send('Tag could not be saved'+err);
-					} 
+					} else{
+							activity.tags.push(tag.id);
+				
+							activity.save(function (err){
+							if(err){
+								return res.status(400).end('Something went wrong with saving the tag in the activity'+err);
+							}
+							else{
+								res.send("Activity "+ activity.id +" succesfully added a tag");
+							}
+						});
+					}
 				});
 
-				activity.tags.push(tag.id);
-				
-				activity.save(function (err){
-					if(err){
-						return res.status(400).end('Something went wrong with saving the tag in the activity'+err);
-					}
-					else{
-						res.send("Activity "+ activity.id +" succesfully added a tag");
-					}
-				});
+
 			}
 	});
 });
